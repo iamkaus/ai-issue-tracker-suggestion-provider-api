@@ -51,6 +51,7 @@ model AISuggestion {
 enum Role {
   USER
   ADMIN
+  MANAGER
 }
 
 enum Status {

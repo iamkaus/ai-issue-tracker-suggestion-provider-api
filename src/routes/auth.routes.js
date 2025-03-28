@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import {signIn, signOut, signUp} from "../controllers/auth.controller.js";
 
 const authRoutes = Router()
 
@@ -9,7 +10,7 @@ const authRoutes = Router()
  * @public
  */
 
-authRoutes.post('/sign-up', async (req, res, next) => {})
+authRoutes.post('/sign-up', signUp)
 
 /**
  * @route POST /api/v1/auth
@@ -17,7 +18,7 @@ authRoutes.post('/sign-up', async (req, res, next) => {})
  * @public
  */
 
-authRoutes.post('/sign-in', async (req, res, next) => {})
+authRoutes.post('/sign-in', signIn)
 
 /**
  * @route POST /api/v1/auth
@@ -26,6 +27,6 @@ authRoutes.post('/sign-in', async (req, res, next) => {})
  */
 
 
-authRoutes.post('/sign-out', async (req, res, next) => {})
+authRoutes.post('/sign-out', signOut)
 
 export default authRoutes
