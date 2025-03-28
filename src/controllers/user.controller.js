@@ -1,10 +1,11 @@
-
+import {genSalt, hash} from "bcryptjs";
 
 /**
  * @route GET /api/v1/users/get-users
  * @desc lists all the user
  * @private
- */ import {prisma} from "../config/prisma.client.js";
+ */
+import {prisma} from "../config/prisma.client.js";
 
 
 export const getUsers = async ( req, res, next ) => {
@@ -109,7 +110,10 @@ export const updateUserById = async (req, res, next) => {
 
         let updateFields = {}
         if ( email ) updateFields.email = email
-        if ( password ) updateFields.password = password
+        if ( password ) {
+            const salt = await genSalt(10)
+            updateFields.password = await hash(password, salt)
+        }
         if ( name ) updateFields.name = name
         if ( role ) updateFields.role = role
 
