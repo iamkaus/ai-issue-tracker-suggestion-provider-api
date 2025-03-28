@@ -134,4 +134,12 @@ export const signIn = async (req, res, next) => {
     }
 }
 
-export const signOut = async (req, res, next) => {}
+/**
+ * @route POST /api/v1/auth/sign-out
+ * @desc signs out a user
+ * @public
+ */
+
+export const signOut = async (req, res, next) => {
+    // TBI
+}
