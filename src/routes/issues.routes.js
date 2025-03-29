@@ -1,4 +1,6 @@
 import { Router } from 'express'
+import {userAuthenticationMiddleware} from "../middlewares/user.middleware.js";
+import {createIssue} from "../controllers/issue.controller.js";
 
 const issuesRoutes = Router()
 
@@ -8,7 +10,7 @@ const issuesRoutes = Router()
  * @private
  */
 
-issuesRoutes.post('/create-issue', async (req, res, next) => {})
+issuesRoutes.post('/create-issue', userAuthenticationMiddleware , createIssue   )
 
 /**
  * @route GET /api/v1/issues/get-issue/:id
@@ -16,7 +18,7 @@ issuesRoutes.post('/create-issue', async (req, res, next) => {})
  * @private
  */
 
-issuesRoutes.get('/get-issue/:id', async (req, res, next) => {})
+issuesRoutes.get('/get-issue/:id', userAuthenticationMiddleware , async (req, res, next) => {})
 
 /**
  * @route GET /api/v1/issues/get-user-issues/:id
@@ -24,7 +26,7 @@ issuesRoutes.get('/get-issue/:id', async (req, res, next) => {})
  * @private
  */
 
-issuesRoutes.get('/get-user-issues/:id', async (req, res, next) => {})
+issuesRoutes.get('/get-user-issues/:id', userAuthenticationMiddleware , async (req, res, next) => {})
 
 /**
  * @route PUT /api/v1/issues/update-issue/:id
@@ -32,7 +34,7 @@ issuesRoutes.get('/get-user-issues/:id', async (req, res, next) => {})
  * @private
  */
 
-issuesRoutes.put('/update-issue/:id', async (req, res, next) => {})
+issuesRoutes.put('/update-issue/:id', userAuthenticationMiddleware , async (req, res, next) => {})
 
 /**
  * @route DELETE /api/v1/issues/delete-issue/:id
@@ -40,6 +42,6 @@ issuesRoutes.put('/update-issue/:id', async (req, res, next) => {})
  * @private
  */
 
-issuesRoutes.delete('/delete-issue/:id', async (req, res, next) => {})
+issuesRoutes.delete('/delete-issue/:id', userAuthenticationMiddleware , async (req, res, next) => {})
 
 export default issuesRoutes 

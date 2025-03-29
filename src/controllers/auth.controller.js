@@ -41,7 +41,7 @@ export const signUp = async (req, res, next) => {
                 email: email,
                 password: hashedPassword,
                 name: name,
-                role: role,
+                role: role.toUpperCase(),
             }
         })
 

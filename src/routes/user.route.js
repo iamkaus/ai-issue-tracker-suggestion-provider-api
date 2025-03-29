@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { deleteUserById, getUserById, getUsers, updateUserById } from "../controllers/user.controller.js";
+import {userAuthenticationMiddleware} from "../middlewares/user.middleware.js";
 
 const userRoutes = Router()
 
@@ -17,7 +18,7 @@ userRoutes.get('/get-users', getUsers)
  * @private
  */
 
-userRoutes.get('/get-user/:id', getUserById)
+userRoutes.get('/get-user/:id', userAuthenticationMiddleware, getUserById)
 
 /**
  * @route PUT /api/v1/users/:id
@@ -25,7 +26,7 @@ userRoutes.get('/get-user/:id', getUserById)
  * @private
  */
 
-userRoutes.put('/update-user/:id', updateUserById)
+userRoutes.put('/update-user/:id', userAuthenticationMiddleware, updateUserById)
 
 
 /**
@@ -34,6 +35,6 @@ userRoutes.put('/update-user/:id', updateUserById)
  * @private
  */
 
-userRoutes.delete('/delete-user/:id', deleteUserById)
+userRoutes.delete('/delete-user/:id', userAuthenticationMiddleware, deleteUserById)
 
 export default userRoutes
