@@ -34,7 +34,7 @@ export const createIssue = async (req, res, next) => {
             )
         }
 
-        const issueStatus = ['OPEN', 'IN-PROGRESS', 'RESOLVED', 'CLOSED'];
+        const issueStatus = ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'];
         if ( status && !issueStatus.includes(status.toUpperCase()) ) {
             return res.status(400).json(
                 {
@@ -200,6 +200,109 @@ export const getUserIssuesById = async (req, res, next) => {
                 success: true,
                 message: `User issue with creatorId: ${creatorId} found.`,
                 data: userIssue
+            }
+        )
+    } catch ( error ) {
+        next(error);
+    }
+}
+
+/**
+ * @route PUT /api/v1/issues/update-issue/:id
+ * @desc updates an issue with specific id
+ * @private
+ */
+
+export const updateIssueById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        if ( !id ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Issue id not found'
+                }
+            )
+        }
+
+        // needs adequate error handling for the part if no update fields are provided
+        // for now it returns the issue as is without updating anything as a status 200
+
+        const { status, priority, assigneeId } = req.body;
+        const updateIssueStatus = ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'];
+        if ( status && !updateIssueStatus.includes(status.toUpperCase()) ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Status must be one of: [OPEN, IN-PROGRESS, RESOLVED, CLOSED]'
+                }
+            )
+        }
+
+        const updateValidPriorities = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
+        if ( priority && !updateValidPriorities.includes(priority.toUpperCase()) ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Priority must be one of: [LOW, MEDIUM, HIGH, CRITICAL]'
+                }
+            )
+        }
+
+        if ( assigneeId ) {
+            const assignee = await prisma.user.findUnique({
+                where: {
+                    id: assigneeId
+                }
+            })
+
+            if ( !assignee ) {
+                return res.status(400).json(
+                    {
+                        success: false,
+                        error: `Assignee with id: ${assigneeId} not found`
+                    }
+                )
+            }
+        }
+
+        let updateFields = {}
+
+        if ( status ) updateFields.status = status.toUpperCase();
+        if ( priority ) updateFields.priority = priority.toUpperCase();
+        if ( assigneeId ) updateFields.assigneeId = assigneeId;
+
+        if ( !updateFields || updateFields.length === 0 ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Update fields cannot be empty. Please provide at least one update field [status, priority, assigneeId].'
+                }
+            )
+        }
+
+        const updatedIssue = await prisma.issue.update({
+            where: {
+                id: id
+            },
+            data: updateFields
+        })
+
+        if ( !updatedIssue ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: `Issue with id: ${id} failed to update. Either the issue with Id: ${id} does not exists or the issue Id is not valid.`
+                }
+            )
+        }
+
+        res.status(200).json(
+            {
+                success: true,
+                message: `Issue with id: ${id} was updated successfully.`,
+                data: updatedIssue
             }
         )
     } catch ( error ) {

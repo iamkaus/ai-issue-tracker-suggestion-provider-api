@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import {userAuthenticationMiddleware} from "../middlewares/user.middleware.js";
-import {createIssue, getIssueById, getUserIssuesById} from "../controllers/issue.controller.js";
+import {createIssue, getIssueById, getUserIssuesById, updateIssueById} from "../controllers/issue.controller.js";
 
 const issuesRoutes = Router()
 
@@ -34,7 +34,7 @@ issuesRoutes.get('/get-user-issues/:creatorId', userAuthenticationMiddleware , g
  * @private
  */
 
-issuesRoutes.put('/update-issue/:id', userAuthenticationMiddleware , async (req, res, next) => {})
+issuesRoutes.put('/update-issue/:id', userAuthenticationMiddleware , updateIssueById)
 
 /**
  * @route DELETE /api/v1/issues/delete-issue/:id
