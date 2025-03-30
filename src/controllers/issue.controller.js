@@ -114,3 +114,49 @@ export const createIssue = async (req, res, next) => {
         next(error);
     }
 }
+
+/**
+ * @route GET /api/v1/issues/get-issue/:id
+ * @desc fetch id specific issue
+ * @private
+ */
+
+export const getIssueById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        if ( !id ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Issue Id cannot be empty. Please provide an issue Id and try again later.'
+                }
+            )
+        }
+
+        const issue = await prisma.issue.findUnique({
+            where: {
+                id: id
+            }
+        })
+
+        if ( !issue ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: `Issue with id: ${id} not found`
+                }
+            )
+        }
+
+        return res.status(200).json(
+            {
+                success: true,
+                message: `Issue with id: ${id} found.`,
+                data: issue
+            }
+        )
+    } catch (error) {
+        next(error);
+    }
+}
