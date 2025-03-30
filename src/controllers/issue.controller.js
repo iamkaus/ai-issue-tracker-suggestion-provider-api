@@ -309,3 +309,61 @@ export const updateIssueById = async (req, res, next) => {
         next(error);
     }
 }
+
+/**
+ * @route DELETE /api/v1/issues/delete-issue/:id
+ * @desc delete an issue with specific id
+ * @private
+ */
+
+export const deleteIssueById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        if ( !id ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Issue id cannot be empty.'
+                }
+            )
+        }
+
+        const issueFound = await prisma.issue.findUnique({
+            where: {
+                id: id
+            }
+        })
+
+        if ( !issueFound ) {
+            return res.status(400).json({
+                success: false,
+                error: `Issue with id: ${id} not found`
+            })
+        }
+
+        const deletedIssue = await prisma.issue.delete({
+            where: {
+                id: id
+            }
+        })
+
+        if ( !deletedIssue ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: `Issue with id: ${id} not found.`
+                }
+            )
+        }
+
+        res.status(200).json(
+            {
+                success: true,
+                message: `Issue with id: ${id} was deleted successfully.`,
+            }
+        )
+    } catch ( error ) {
+        next(error);
+    }
+}

@@ -1,6 +1,12 @@
 import { Router } from 'express'
 import {userAuthenticationMiddleware} from "../middlewares/user.middleware.js";
-import {createIssue, getIssueById, getUserIssuesById, updateIssueById} from "../controllers/issue.controller.js";
+import {
+    createIssue,
+    deleteIssueById,
+    getIssueById,
+    getUserIssuesById,
+    updateIssueById
+} from "../controllers/issue.controller.js";
 
 const issuesRoutes = Router()
 
@@ -42,6 +48,6 @@ issuesRoutes.put('/update-issue/:id', userAuthenticationMiddleware , updateIssue
  * @private
  */
 
-issuesRoutes.delete('/delete-issue/:id', userAuthenticationMiddleware , async (req, res, next) => {})
+issuesRoutes.delete('/delete-issue/:id', userAuthenticationMiddleware , deleteIssueById)
 
 export default issuesRoutes 
