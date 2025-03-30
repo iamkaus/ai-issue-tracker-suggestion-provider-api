@@ -160,3 +160,49 @@ export const getIssueById = async (req, res, next) => {
         next(error);
     }
 }
+
+/**
+ * @route GET /api/v1/issues/get-user-issues/:creatorId
+ * @desc get issues created by a user with specific id
+ * @private
+ */
+
+export const getUserIssuesById = async (req, res, next) => {
+    try {
+        const { creatorId } = req.params;
+
+        if ( !creatorId ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Creator id not found'
+                }
+            )
+        }
+
+        const userIssue = await prisma.issue.findMany({
+            where: {
+                creatorId: creatorId
+            }
+        })
+
+        if ( !userIssue ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: `Failed to get user issue with creatorId: ${creatorId}.`
+                }
+            )
+        }
+
+        res.status(200).json(
+            {
+                success: true,
+                message: `User issue with creatorId: ${creatorId} found.`,
+                data: userIssue
+            }
+        )
+    } catch ( error ) {
+        next(error);
+    }
+}

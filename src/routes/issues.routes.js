@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import {userAuthenticationMiddleware} from "../middlewares/user.middleware.js";
-import { createIssue, getIssueById } from "../controllers/issue.controller.js";
+import {createIssue, getIssueById, getUserIssuesById} from "../controllers/issue.controller.js";
 
 const issuesRoutes = Router()
 
@@ -26,7 +26,7 @@ issuesRoutes.get('/get-issue/:id', userAuthenticationMiddleware , getIssueById)
  * @private
  */
 
-issuesRoutes.get('/get-user-issues/:id', userAuthenticationMiddleware , async (req, res, next) => {})
+issuesRoutes.get('/get-user-issues/:creatorId', userAuthenticationMiddleware , getUserIssuesById)
 
 /**
  * @route PUT /api/v1/issues/update-issue/:id
