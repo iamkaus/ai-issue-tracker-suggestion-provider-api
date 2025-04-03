@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { deleteUserById, getUserById, getUsers, updateUserById } from "../controllers/user.controller.js";
 import {userAuthenticationMiddleware} from "../middlewares/user.middleware.js";
+import {adminMiddleware} from "../middlewares/admin.middleware.js";
 
 const userRoutes = Router()
 
@@ -10,7 +11,7 @@ const userRoutes = Router()
  * @private
  */
 
-userRoutes.get('/get-users', getUsers)
+userRoutes.get('/get-users', adminMiddleware, getUsers)
 
 /**
  * @route GET /api/v1/users/:id

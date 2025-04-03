@@ -6,4 +6,5 @@ export const {
     PORT,
     NODE_ENV,
     JWT_SECRET,
+    GEMINI_API_KEY
 } = process.env

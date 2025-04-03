@@ -4,6 +4,7 @@ import authRoutes from "./src/routes/auth.routes.js";
 import issuesRoutes from "./src/routes/issues.routes.js";
 import userRoutes from "./src/routes/user.route.js";
 import {PORT} from "./src/config/env.config.js";
+import suggestionsRouter from "./src/routes/suggestions.routes.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/issues', issuesRoutes);
+app.use('/api/v1/suggestions', suggestionsRouter)
 
 app.listen(PORT, () => {
     console.log(`AI issue tracker and suggestions provider API Listening on port: http://localhost:${PORT}`)
