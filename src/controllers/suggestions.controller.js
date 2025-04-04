@@ -75,7 +75,27 @@ export const createSuggestion = async (req, res, next) => {
  * @private
  */
 
-export const getSuggestions = async (req, res, next) => {}
+export const getSuggestions = async (req, res, next) => {
+    try {
+        const suggestions = await prisma.aISuggestion.findMany()
+
+        if ( !suggestions ) {
+            return res.status(400).json({
+                success: false,
+                error: 'Suggestions not found.'
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Suggestions found successfully.',
+            data: suggestions
+        })
+
+    } catch ( error ) {
+        next(error);
+    }
+}
 
 /**
  * @route GET /api/v1/suggestions/get-suggestion/:id
