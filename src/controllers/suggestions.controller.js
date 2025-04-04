@@ -103,4 +103,38 @@ export const getSuggestions = async (req, res, next) => {
  * @private
  */
 
-export const getSuggestionById = async (req, res, next) => {}
+export const getSuggestionById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        if ( !id ) {
+            return res.status(400).json({
+                success: false,
+                error: 'Id cannot be found or is empty.'
+            })
+        }
+        
+        const aIsuggestion = await prisma.aISuggestion.findUnique(
+            {
+                where: {
+                    id: id
+                }
+            }
+        )
+        
+        if ( !aIsuggestion ) {
+            return res.status(400).json({
+                success: false,
+                error: `Suggestion with id: ${id} cannot be found.`
+            })
+        }
+        
+        res.status(200).json({
+            success: true,
+            message: 'Suggestion found successfully.',
+            data: aIsuggestion
+        })
+    } catch ( error ) {
+        next(error);
+    }
+}
