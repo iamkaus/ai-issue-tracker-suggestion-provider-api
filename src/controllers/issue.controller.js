@@ -226,8 +226,34 @@ export const updateIssueById = async (req, res, next) => {
             )
         }
 
-        // needs adequate error handling for the part if no update fields are provided
-        // for now it returns the issue as is without updating anything as a status 200
+        const existingIssue = await prisma.issue.findUnique(
+            {
+                where: {
+                    id: id
+                }
+            }
+        )
+
+        if ( !existingIssue ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: `Issue with id: ${id} not found`
+                }
+            )
+        }
+
+        const creatorId = existingIssue.creatorId
+        const currentUserId = req.user.id
+
+        if ( creatorId !== currentUserId ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: `Current user cannot update issue with creatorId: ${creatorId}.`
+                }
+            )
+        }
 
         const { status, priority, assigneeId } = req.body;
         const updateIssueStatus = ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'];
@@ -339,6 +365,13 @@ export const deleteIssueById = async (req, res, next) => {
             return res.status(400).json({
                 success: false,
                 error: `Issue with id: ${id} not found`
+            })
+        }
+
+        if ( issueFound.creatorId !== req.user.id ) {
+            return res.status(400).json({
+                success: false,
+                error: `Current user with id: ${req.user.id} cannot delete issue with creatorId: ${issueFound.creatorId}`
             })
         }
 
