@@ -1,5 +1,4 @@
 # Feature
-    -> make it sure that no other user can edit/update issue created by another user.
     -> add caching.
     -> add a filter for issue to sort them based of priority/status.
     -> refresh token feature to generate login token so a user wont need to login every time auth token expires.
