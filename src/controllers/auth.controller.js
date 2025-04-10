@@ -13,10 +13,10 @@ export const signUp = async (req, res, next) => {
     try {
         const { email, password, name, role } = req.body
 
-        if (!email || !password || !name || !role) {
+        if ( !email || !password || !name || !role ) {
             return res.status(400).json({
                 success: false,
-                error: 'Username or email or password is missing'
+                error: 'Username or email or password or role is missing'
             })
         }
 
@@ -89,7 +89,8 @@ export const signIn = async (req, res, next) => {
         const user = await prisma.user.findUnique({
             where: {
                 email: email
-            }
+            },
+
         })
 
         if ( !user ) {
@@ -99,7 +100,7 @@ export const signIn = async (req, res, next) => {
             })
         }
 
-        const isValidPassword = await bcrypt.compare( password, user.password)
+        const isValidPassword = await bcrypt.compare( password, user.password )
 
         if ( !isValidPassword ) {
             return res.status(400).json({
