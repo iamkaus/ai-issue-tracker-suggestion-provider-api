@@ -5,12 +5,14 @@ import issuesRoutes from "./src/routes/issues.routes.js";
 import userRoutes from "./src/routes/user.route.js";
 import {PORT} from "./src/config/env.config.js";
 import suggestionsRouter from "./src/routes/suggestions.routes.js";
+import { arcjetRateLimitingMiddleware } from "./src/middlewares/arcjet-rate-limiting.middleware.js";
 
 const app = express();
 
 app.use(express.json());
 app.use(cors())
 app.use(express.urlencoded({ extended: false }));
+app.use(arcjetRateLimitingMiddleware);
 
 app.get('/', (req, res) => {
     res.send('Welcome to Ai issue tracker and suggestions provider API.')

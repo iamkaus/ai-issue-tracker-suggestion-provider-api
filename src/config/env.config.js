@@ -6,5 +6,7 @@ export const {
     PORT,
     NODE_ENV,
     JWT_SECRET,
-    GEMINI_API_KEY
+    GEMINI_API_KEY,
+    ARCJET_API_KEY,
+    ARCJET_ENV
 } = process.env
