@@ -116,6 +116,20 @@ export const createIssue = async (req, res, next) => {
 }
 
 /**
+ * @route POST /api/v1/issues/create-github-issue
+ * @desc allows user to create an issue
+ * @private
+ */
+
+
+/**
+ * Handles issue creation by fetching issues from github repositories
+ * @todo the method is yet to be implemented
+ */
+
+export const createGithubIssue = async (req, res, next) => {}
+
+/**
  * @route GET /api/v1/issues/get-issue/:id
  * @desc fetch id specific issue
  * @private

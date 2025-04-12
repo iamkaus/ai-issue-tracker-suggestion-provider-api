@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {userAuthenticationMiddleware} from "../middlewares/user.middleware.js";
 import {
+    createGithubIssue,
     createIssue,
     deleteIssueById,
     getIssueById,
@@ -17,6 +18,19 @@ const issuesRoutes = Router()
  */
 
 issuesRoutes.post('/create-issue', userAuthenticationMiddleware , createIssue   )
+
+/**
+ * @route POST /api/v1/issues/create-github-issue
+ * @desc allows user to create an issue
+ * @private
+ */
+
+/**
+ * Handles issue creation by fetching issues from github repositories
+ * @todo the route and associated method is to be implemented
+ */
+
+issuesRoutes.post('/create-github-issue', userAuthenticationMiddleware , createGithubIssue)
 
 /**
  * @route GET /api/v1/issues/get-issue/:id
