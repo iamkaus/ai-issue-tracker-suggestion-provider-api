@@ -25,11 +25,6 @@ issuesRoutes.post('/create-issue', userAuthenticationMiddleware , createIssue   
  * @private
  */
 
-/**
- * Handles issue creation by fetching issues from github repositories
- * @todo the route and associated method is to be implemented
- */
-
 issuesRoutes.post('/create-github-issue', userAuthenticationMiddleware , createGithubIssue)
 
 /**

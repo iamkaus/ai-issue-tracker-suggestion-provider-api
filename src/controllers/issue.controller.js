@@ -1,4 +1,5 @@
 import { prisma } from '../config/prisma.client.js'
+import { fetchRepositoryDetails } from "../../helper/fetch.repo.helper.js";
 
 /**
  * Create Issue Controller for Express.js
@@ -121,13 +122,138 @@ export const createIssue = async (req, res, next) => {
  * @private
  */
 
+export const createGithubIssue = async (req, res, next) => {
+    try {
+        const { owner, repository, issueNum, description, priority, assigneeId } = req.body
 
-/**
- * Handles issue creation by fetching issues from github repositories
- * @todo the method is yet to be implemented
- */
+        if ( !owner || !repository || repository.length === 0 ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Owner or repository is missing.'
+                }
+            )
+        }
 
-export const createGithubIssue = async (req, res, next) => {}
+        if ( !description || description.length === 0 ) {
+            return res.status(400).json(
+                {
+                    error: 'Description must be at least 3 characters long'
+                }
+            )
+        }
+
+        const validPriorities = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
+        if ( priority && !validPriorities.includes(priority.toUpperCase()) ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Priority must be one of: [LOW, MEDIUM, HIGH, CRITICAL]'
+                }
+            )
+        }
+
+        if ( assigneeId ) {
+            const assignee = await prisma.user.findUnique({
+                where: {
+                    id: assigneeId
+                }
+            })
+
+            if ( !assignee ) {
+                return res.status(400).json(
+                    {
+                        success: false,
+                        error: `Assignee with id: ${assigneeId} not found`
+                    }
+                )
+            }
+        }
+
+        const creatorId = req.user.id
+
+        if ( !creatorId ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Creator id not found'
+                }
+            )
+        }
+
+        if ( !issueNum ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Issue number cannot be empty'
+                }
+            )
+        }
+
+        const issueNumber = parseInt(issueNum)
+
+        const getRepositoryDetails = await fetchRepositoryDetails(owner, repository, issueNumber);
+
+        if ( !getRepositoryDetails ) {
+            return res.status(404).json({
+                success: false,
+                error: 'Repository not found'
+            })
+        }
+
+        const { title, status } = getRepositoryDetails;
+
+        if ( !title || title.length === 0 ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Title must be at least 3 characters long'
+                }
+            )
+        }
+
+        const issueStatus = ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'];
+        if ( status && !issueStatus.includes(status.toUpperCase()) ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Status must be one of: [OPEN, IN-PROGRESS, RESOLVED, CLOSED]'
+                }
+            )
+        }
+
+        const newIssue = await prisma.issue.create({
+            data: {
+                title: title,
+                description: description,
+                creatorId: creatorId,
+                ...(status && { status: status.toUpperCase() }),
+                ...(priority && { priority: priority.toUpperCase() }),
+                ...(assigneeId && { assigneeId: assigneeId }),
+            }
+        })
+
+        if ( !newIssue ) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    error: 'Failed to create issue'
+                }
+            )
+        }
+
+        return res.status(201).json(
+            {
+                success: true,
+                message: 'Issue created successfully',
+                data: newIssue
+            }
+        )
+
+    } catch ( error ) {
+        next(error);
+    }
+}
 
 /**
  * @route GET /api/v1/issues/get-issue/:id

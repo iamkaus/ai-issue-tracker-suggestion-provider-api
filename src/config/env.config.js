@@ -8,5 +8,6 @@ export const {
     JWT_SECRET,
     GEMINI_API_KEY,
     ARCJET_API_KEY,
-    ARCJET_ENV
+    GITHUB_AUTHORIZATION_TOKEN,
+    GITHUB_API
 } = process.env
