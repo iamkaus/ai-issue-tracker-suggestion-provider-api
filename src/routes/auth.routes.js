@@ -26,6 +26,12 @@ authRoutes.post('/sign-in', signIn)
  * @public
  */
 
+/**
+ *
+ * @todo the sign-out method is yet to be implemented, the route is not up for use at the moment
+ *
+ */
+
 
 authRoutes.post('/sign-out', signOut)
 

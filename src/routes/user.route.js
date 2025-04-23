@@ -14,7 +14,7 @@ const userRoutes = Router()
 userRoutes.get('/get-users', adminMiddleware, getUsers)
 
 /**
- * @route GET /api/v1/users/:id
+ * @route GET /api/v1/users/get-user/:id
  * @desc the route allows authorized users to fetch a user with provided id
  * @private
  */
@@ -22,7 +22,7 @@ userRoutes.get('/get-users', adminMiddleware, getUsers)
 userRoutes.get('/get-user/:id', userAuthenticationMiddleware, getUserById)
 
 /**
- * @route PUT /api/v1/users/:id
+ * @route PUT /api/v1/users/update-user/:id
  * @desc the route allows authorized users to update a user with provided id
  * @private
  */
@@ -31,7 +31,7 @@ userRoutes.put('/update-user/:id', userAuthenticationMiddleware, updateUserById)
 
 
 /**
- * @route DELETE /api/v1/users/:id
+ * @route DELETE /api/v1/users/delete-user/:id
  * @desc the route allows authorized users to delete a user with provided id
  * @private
  */

@@ -141,6 +141,12 @@ export const signIn = async (req, res, next) => {
  * @public
  */
 
+/**
+ *
+ * @todo the sign-out method is yet to be implemented, the route is not up for use at the moment
+ *
+ */
+
 export const signOut = async (req, res, next) => {
     // TBI
 }
